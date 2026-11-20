@@ -17,20 +17,18 @@ from [LizardByte GameDB](https://github.com/LizardByte/GameDB), a static mirror 
 
 ## Install
 
-This plugin is not in Punktfunk's official catalog yet, so it is installed by its package name
-and shows as **Unverified**.
+Available in **Punktfunk's official catalog** as **GameDB** (Punktfunk 0.47.0 or later).
 
 ### a) From the web console
 
 1. Open **Plugins → Browse**.
-2. At the bottom of the page, click **Install from package spec…**.
-3. In **Package spec**, type `@sopis/plugin-gamedb@1.0.1`, and type it again in **Type the
-   package spec again to confirm**.
-4. Tick **I understand that this runs unreviewed code with operator privileges.**, enter the
-   **Console password** and press **Install unverified**.
-5. Turn it on under **Library → Sources → Art & Metadata**.
+2. Search for **GameDB**, open its card and click **Install**.
+3. Once installed, turn it on under **Library → Sources → Art & Metadata**.
 
-### b) From a terminal
+The catalog installation is reviewed and does not require **Install from package spec…**
+or the unverified-code confirmation.
+
+### b) From a terminal (direct npm installation)
 
 On the host, from an elevated terminal (Windows) or as the host user (Linux):
 
@@ -39,6 +37,9 @@ punktfunk-host plugins add @sopis/plugin-gamedb --allow-public-registry
 ```
 
 Then turn it on under **Library → Sources → Art & Metadata**.
+
+This command installs directly from npm, outside the reviewed catalog flow, and may show as
+**Unverified**. Prefer the web console above to install the catalog's reviewed version.
 
 ### If it shows "Stopped"
 

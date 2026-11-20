@@ -17,20 +17,18 @@ Vibepollo: en [LizardByte GameDB](https://github.com/LizardByte/GameDB), una cop
 
 ## Instalación
 
-Este plugin todavía no está en el catálogo oficial de Punktfunk, así que se instala por su nombre
-de paquete y aparece como **Sin verificar**.
+Disponible en el **catálogo oficial de Punktfunk** como **GameDB** (Punktfunk 0.47.0 o posterior).
 
 ### a) Desde la consola web
 
 1. Abre **Plugins → Explorar**.
-2. Al final de la página, pulsa **Instalar desde especificación de paquete…**.
-3. En **Especificación del paquete** escribe `@sopis/plugin-gamedb@1.0.1`, y otra vez en
-   **Escribe de nuevo la especificación para confirmar**.
-4. Marca **Entiendo que esto ejecuta código no revisado con privilegios de operador.**, escribe la
-   **Contraseña de la consola** y pulsa **Instalar sin verificar**.
-5. Actívalo en **Biblioteca → Fuentes → Imágenes y metadatos**.
+2. Busca **GameDB**, abre su ficha y pulsa **Instalar**.
+3. Una vez instalado, actívalo en **Biblioteca → Fuentes → Imágenes y metadatos**.
 
-### b) Desde una terminal
+La instalación desde el catálogo está revisada: no necesitas **Instalar desde especificación
+de paquete…** ni confirmar la ejecución de código sin verificar.
+
+### b) Desde una terminal (instalación directa desde npm)
 
 En el host, desde una terminal de administrador (Windows) o como el usuario del host (Linux):
 
@@ -39,6 +37,10 @@ punktfunk-host plugins add @sopis/plugin-gamedb --allow-public-registry
 ```
 
 Después actívalo en **Biblioteca → Fuentes → Imágenes y metadatos**.
+
+Este comando instala directamente desde npm, fuera del proceso del catálogo revisado, y puede
+aparecer como **Sin verificar**. Para instalar la versión revisada del catálogo, usa preferentemente
+la consola web indicada arriba.
 
 ### Si aparece "Detenido"
 
