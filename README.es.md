@@ -55,7 +55,7 @@ punktfunk-host plugins enable
 
 `bun install && bun run build && bun pm pack`, copia el `.tgz` a la carpeta de plugins
 (`%ProgramData%\punktfunk\plugins` en Windows, `~/.config/punktfunk/plugins` en Linux) y ejecuta
-allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.2.tgz --allow-public-registry`. Deja el
+allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.3.tgz --allow-public-registry`. Deja el
 `./`: una ruta sin `/` se interpreta como nombre de plugin.
 
 ## Idioma
@@ -79,3 +79,9 @@ Datos e imágenes de juegos © [IGDB](https://www.igdb.com), a través de Lizard
 plugin solo enlaza a ellos; no incluye ningún dato.
 
 Licencia: MIT o Apache-2.0.
+
+## Apoya el proyecto
+
+Si este plugin te resulta útil, puedes apoyar mi trabajo en Ko-fi. ¡Gracias!
+
+[![Apóyame en Ko-fi](https://storage.ko-fi.com/cdn/kofi2.png?v=3)](https://ko-fi.com/sopis)
