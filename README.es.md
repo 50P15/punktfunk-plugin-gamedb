@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-Fuente de Art & Metadata para Punktfunk que busca carátulas igual que Sunshine, Apollo y
+Fuente de imágenes y metadatos para Punktfunk que busca carátulas igual que Sunshine, Apollo y
 Vibepollo: en [LizardByte GameDB](https://github.com/LizardByte/GameDB), una copia estática de
 [IGDB](https://www.igdb.com). **Sin cuenta ni clave de API.**
 
@@ -15,18 +15,44 @@ Vibepollo: en [LizardByte GameDB](https://github.com/LizardByte/GameDB), una cop
 
 ## Instalación
 
+Este plugin todavía no está en el catálogo oficial de Punktfunk, así que se instala por su nombre
+de paquete y aparece como **Sin verificar**.
+
+### a) Desde la consola web
+
+1. Abre **Plugins → Explorar**.
+2. Al final de la página, pulsa **Instalar desde especificación de paquete…**.
+3. En **Especificación del paquete** escribe `@sopis/plugin-gamedb@1.0.0`, y otra vez en
+   **Escribe de nuevo la especificación para confirmar**.
+4. Marca **Entiendo que esto ejecuta código no revisado con privilegios de operador.**, escribe la
+   **Contraseña de la consola** y pulsa **Instalar sin verificar**.
+5. Actívalo en **Biblioteca → Fuentes → Imágenes y metadatos**.
+
+### b) Desde una terminal
+
 En el host, desde una terminal de administrador (Windows) o como el usuario del host (Linux):
 
 ```sh
 punktfunk-host plugins add @sopis/plugin-gamedb --allow-public-registry
 ```
 
-Después actívalo en **Biblioteca → Fuentes → Art & Metadata**.
+Después actívalo en **Biblioteca → Fuentes → Imágenes y metadatos**.
 
-Desde una compilación propia: `bun install && bun run build && bun pm pack`, copia el `.tgz` a la
-carpeta de plugins (`%ProgramData%\punktfunk\plugins` en Windows, `~/.config/punktfunk/plugins`
-en Linux) y ejecuta allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.0.tgz
---allow-public-registry`. Deja el `./`: una ruta sin `/` se interpreta como nombre de plugin.
+### Si aparece "Detenido"
+
+Reinicia el ejecutor de plugins (**Plugins → Instalados → Ejecutor de plugins**, o):
+
+```sh
+punktfunk-host plugins disable
+punktfunk-host plugins enable
+```
+
+### Desde una compilación propia
+
+`bun install && bun run build && bun pm pack`, copia el `.tgz` a la carpeta de plugins
+(`%ProgramData%\punktfunk\plugins` en Windows, `~/.config/punktfunk/plugins` en Linux) y ejecuta
+allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.0.tgz --allow-public-registry`. Deja el
+`./`: una ruta sin `/` se interpreta como nombre de plugin.
 
 ## Idioma
 
