@@ -55,7 +55,7 @@ punktfunk-host plugins enable
 
 `bun install && bun run build && bun pm pack`, copia el `.tgz` a la carpeta de plugins
 (`%ProgramData%\punktfunk\plugins` en Windows, `~/.config/punktfunk/plugins` en Linux) y ejecuta
-allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.1.tgz --allow-public-registry`. Deja el
+allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.2.tgz --allow-public-registry`. Deja el
 `./`: una ruta sin `/` se interpreta como nombre de plugin.
 
 ## Idioma
