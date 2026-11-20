@@ -11,6 +11,8 @@ from [LizardByte GameDB](https://github.com/LizardByte/GameDB), a static mirror 
 - Matches a title automatically only when the name is the same, or the same plus a subtitle
   (`Monkey Island 2` → `Monkey Island 2: LeChuck's Revenge`). Anything else: open the game,
   **Wrong game?**, type a name and pick a cover — the same picker as Vibepollo.
+- Spaces and punctuation don't count when matching or searching: `Little Big Planet` finds
+  `LittleBigPlanet`.
 - **Choose…** on the cover lists the covers of every edition sharing the game's name.
 
 ## Install
@@ -22,7 +24,7 @@ and shows as **Unverified**.
 
 1. Open **Plugins → Browse**.
 2. At the bottom of the page, click **Install from package spec…**.
-3. In **Package spec**, type `@sopis/plugin-gamedb@1.0.0`, and type it again in **Type the
+3. In **Package spec**, type `@sopis/plugin-gamedb@1.0.1`, and type it again in **Type the
    package spec again to confirm**.
 4. Tick **I understand that this runs unreviewed code with operator privileges.**, enter the
    **Console password** and press **Install unverified**.
@@ -51,7 +53,7 @@ punktfunk-host plugins enable
 
 `bun install && bun run build && bun pm pack`, copy the `.tgz` into the plugins folder
 (`%ProgramData%\punktfunk\plugins` on Windows, `~/.config/punktfunk/plugins` on Linux) and run
-`punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.0.tgz --allow-public-registry` there. Keep
+`punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.1.tgz --allow-public-registry` there. Keep
 the `./`: a path without a `/` is read as a plugin name.
 
 ## Language

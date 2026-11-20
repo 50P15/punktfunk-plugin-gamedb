@@ -11,6 +11,8 @@ Vibepollo: en [LizardByte GameDB](https://github.com/LizardByte/GameDB), una cop
 - Solo asigna un juego automáticamente si el nombre coincide, o coincide más un subtítulo
   (`Monkey Island 2` → `Monkey Island 2: LeChuck's Revenge`). Si no, abre el juego, pulsa
   **¿Juego incorrecto?**, escribe un nombre y elige la carátula, como en Vibepollo.
+- Los espacios y signos no cuentan al buscar ni al asignar: `Little Big Planet` encuentra
+  `LittleBigPlanet`.
 - **Elegir…** en la carátula muestra las de todas las ediciones con el mismo nombre.
 
 ## Instalación
@@ -22,7 +24,7 @@ de paquete y aparece como **Sin verificar**.
 
 1. Abre **Plugins → Explorar**.
 2. Al final de la página, pulsa **Instalar desde especificación de paquete…**.
-3. En **Especificación del paquete** escribe `@sopis/plugin-gamedb@1.0.0`, y otra vez en
+3. En **Especificación del paquete** escribe `@sopis/plugin-gamedb@1.0.1`, y otra vez en
    **Escribe de nuevo la especificación para confirmar**.
 4. Marca **Entiendo que esto ejecuta código no revisado con privilegios de operador.**, escribe la
    **Contraseña de la consola** y pulsa **Instalar sin verificar**.
@@ -51,7 +53,7 @@ punktfunk-host plugins enable
 
 `bun install && bun run build && bun pm pack`, copia el `.tgz` a la carpeta de plugins
 (`%ProgramData%\punktfunk\plugins` en Windows, `~/.config/punktfunk/plugins` en Linux) y ejecuta
-allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.0.tgz --allow-public-registry`. Deja el
+allí `punktfunk-host plugins add ./sopis-plugin-gamedb-1.0.1.tgz --allow-public-registry`. Deja el
 `./`: una ruta sin `/` se interpreta como nombre de plugin.
 
 ## Idioma

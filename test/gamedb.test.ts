@@ -6,9 +6,10 @@ import {
 	imageId,
 	makeClient,
 	prefixHits,
+	squash,
 } from "../src/gamedb.js";
 import { detectLang, genreName, resolveLang, t } from "../src/i18n.js";
-import { bestHit, found, normalize, rank } from "../src/plugin.js";
+import { bestHit, found, rank } from "../src/plugin.js";
 
 describe("buckets", () => {
 	test("first two characters, letters and digits only, like Vibepollo", () => {
@@ -26,6 +27,23 @@ describe("buckets", () => {
 		};
 		expect(prefixHits(b, "monkey island").map((h) => h.id)).toEqual(["1", "2"]);
 		expect(prefixHits(b, "  ")).toEqual([]);
+	});
+
+	test("prefix hits also ignore spaces and punctuation", () => {
+		const b = {
+			"1058": { name: "LittleBigPlanet" },
+			"7330": { name: "LittleBigPlanet 3" },
+			"321183": { name: "Little Big Planet 3: Dark Souls 3 Costume pack" },
+			"81728": { name: "Little Smart Planet" },
+		};
+		expect(prefixHits(b, "Little Big Planet").map((h) => h.id)).toEqual([
+			"1058",
+			"7330",
+			"321183",
+		]);
+		expect(
+			prefixHits({ "9": { name: "StarCraft" } }, "Star Craft").length,
+		).toBe(1);
 	});
 
 	test("image ids from GameDB urls", () => {
@@ -46,12 +64,28 @@ describe("matching", () => {
 		{ id: "324164", name: "Monkey Island 2.5: El Parque de las Pesadillas" },
 	];
 
-	test("normalize drops marks, accents and punctuation", () => {
-		expect(normalize("Life Is Strange:  Double Exposure")).toBe(
-			"life is strange double exposure",
+	test("squash drops spaces, marks, accents and punctuation", () => {
+		expect(squash("Life Is Strange:  Double Exposure")).toBe(
+			"lifeisstrangedoubleexposure",
 		);
-		expect(normalize("Rayman® Origins")).toBe("rayman origins");
-		expect(normalize("Pokémon")).toBe("pokemon");
+		expect(squash("Rayman® Origins")).toBe("raymanorigins");
+		expect(squash("Pokémon")).toBe("pokemon");
+		expect(squash("Little Big Planet")).toBe(squash("LittleBigPlanet"));
+	});
+
+	test("spaces don't count, and an exact name beats a DLC's subtitle", () => {
+		const hits = [
+			{ id: "321183", name: "Little Big Planet 3: Dark Souls 3 Costume pack" },
+			{ id: "7330", name: "LittleBigPlanet 3" },
+			{ id: "11252", name: "LittleBigPlanet 3: The Journey Home" },
+		];
+		expect(bestHit(hits, "Little Big Planet 3")?.id).toBe("7330");
+		expect(bestHit(hits, "LittleBigPlanet 3")?.id).toBe("7330");
+		expect(rank(hits, "Little Big Planet 3").map((h) => h.id)).toEqual([
+			"7330",
+			"11252",
+			"321183",
+		]);
 	});
 
 	test("the title plus a subtitle", () => {
@@ -168,6 +202,28 @@ describe("client", () => {
 		expect(calls.length).toBe(1);
 	});
 
+	test("a term whose spaces move it to another bucket reads both", async () => {
+		const calls: string[] = [];
+		const c = makeClient(
+			fake(
+				{
+					"/buckets/a.json": {
+						status: 200,
+						body: { "1": { name: "A Way Out" } },
+					},
+					"/buckets/aw.json": {
+						status: 200,
+						body: { "2": { name: "AWayOut Remix" } },
+					},
+				},
+				calls,
+			),
+		);
+		const hits = await Effect.runPromise(c.search("A Way Out"));
+		expect(hits.map((h) => h.id).sort()).toEqual(["1", "2"]);
+		expect(calls.length).toBe(2);
+	});
+
 	test("an unknown id is null; a non-numeric id is never fetched", async () => {
 		const calls: string[] = [];
 		const c = makeClient(fake({}, calls));
@@ -204,6 +260,9 @@ describe.skipIf(!live)("live GameDB", () => {
 		["Monkey Island 2", "61"],
 		["Unravel Two", "19241"],
 		["Return to Monkey Island", "195517"],
+		["Little Big Planet 3", "7330"],
+		["Star Craft", "230"],
+		["Little Big Planet", "1058"],
 	];
 	for (const [title, id] of titles) {
 		test(`matches ${title}`, async () => {

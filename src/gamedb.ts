@@ -70,16 +70,32 @@ export const bucketOf = (name: string): string => {
 const dotted = (s: string): string =>
 	s.trim().replace(/\s+/g, ".").toLocaleLowerCase();
 
-/** Names in a bucket that start with the term, the way Vibepollo's cover picker filters them. */
+/** Letters and digits only, without accents: "Little Big Planet" and "LittleBigPlanet" agree. */
+export const squash = (s: string): string =>
+	s
+		.toLocaleLowerCase()
+		.normalize("NFKD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/[^a-z0-9]+/g, "");
+
+/**
+ * Names in a bucket that start with the term: Vibepollo's cover picker test, or the same with
+ * spaces and punctuation ignored, so "Little Big Planet" also finds "LittleBigPlanet".
+ */
 export const prefixHits = (
 	bucket: Readonly<Record<string, { readonly name?: unknown }>>,
 	term: string,
 ): BucketHit[] => {
 	const want = dotted(term);
 	if (!want) return [];
+	const loose = squash(term);
 	const out: BucketHit[] = [];
 	for (const [id, item] of Object.entries(bucket)) {
-		if (typeof item?.name === "string" && dotted(item.name).startsWith(want)) {
+		if (
+			typeof item?.name === "string" &&
+			(dotted(item.name).startsWith(want) ||
+				(loose !== "" && squash(item.name).startsWith(loose)))
+		) {
 			out.push({ id, name: item.name });
 		}
 	}
@@ -158,8 +174,7 @@ export const makeClient = (
 			}),
 		);
 
-	const bucket = (name: string) => {
-		const key = bucketOf(name);
+	const bucket = (key: string) => {
 		const hit = buckets.get(key);
 		if (hit && now() - hit.at < BUCKET_TTL_MS) return Effect.succeed(hit.data);
 		return get<Record<string, { name?: unknown }>>(
@@ -190,11 +205,22 @@ export const makeClient = (
 	};
 
 	return {
-		/** Every name in the term's bucket that starts with the term. */
-		search: (term: string) =>
-			term.trim()
-				? bucket(term).pipe(Effect.map((b) => prefixHits(b, term)))
-				: Effect.succeed<BucketHit[]>([]),
+		/**
+		 * Every name that starts with the term. Without its spaces the term can sit in another
+		 * bucket ("A Way Out" in `a`, "AWayOut" in `aw`), so both are read.
+		 */
+		search: (term: string): Effect.Effect<BucketHit[], Failure> => {
+			if (!term.trim()) return Effect.succeed([]);
+			const keys = [...new Set([term, squash(term) || term].map(bucketOf))];
+			return Effect.forEach(keys, (k) => bucket(k), { concurrency: 2 }).pipe(
+				Effect.map((bs) => {
+					const seen = new Set<string>();
+					return bs
+						.flatMap((b) => prefixHits(b, term))
+						.filter((h) => !seen.has(h.id) && seen.add(h.id) !== undefined);
+				}),
+			);
+		},
 		game,
 	};
 };

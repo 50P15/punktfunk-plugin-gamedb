@@ -1,6 +1,6 @@
 {
 	"name": "@sopis/plugin-gamedb",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": false,
 	"type": "module",
 	"description": "Punktfunk Art & Metadata source: cover search from LizardByte GameDB (IGDB covers), no API key — the cover picker Apollo and Vibepollo use.",
@@ -54,7 +54,7 @@
 		"cover-art",
 		"game-library"
 	],
-	"author": "50P15",
+	"author": "sopis",
 	"publishConfig": {
 		"access": "public"
 	}

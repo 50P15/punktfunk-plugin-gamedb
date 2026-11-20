@@ -15,6 +15,7 @@ import {
 	igdbUrl,
 	imageId,
 	makeClient,
+	squash,
 } from "./gamedb.js";
 import { genreName, type Lang, resolveLang, systemLang, t } from "./i18n.js";
 
@@ -37,15 +38,6 @@ const langOf = (cfg: Config | undefined): Lang => resolveLang(cfg?.language);
 /** Hits shown by "Wrong game?", each with a cover thumbnail. */
 const SEARCH_LIMIT = 24;
 
-export const normalize = (s: string): string =>
-	s
-		.toLocaleLowerCase()
-		.normalize("NFKD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.replace(/[®™©]/g, "")
-		.replace(/[^a-z0-9]+/g, " ")
-		.trim();
-
 /** Years a game came out in, earliest first. */
 export const yearOf = (g: GameDbGame): number | undefined => {
 	const ys = (g.release_dates ?? [])
@@ -59,8 +51,8 @@ export const rank = (
 	hits: ReadonlyArray<BucketHit>,
 	term: string,
 ): BucketHit[] => {
-	const want = normalize(term);
-	const score = (h: BucketHit) => (normalize(h.name) === want ? 0 : 1);
+	const want = squash(term);
+	const score = (h: BucketHit) => (squash(h.name) === want ? 0 : 1);
 	return [...hits].sort(
 		(a, b) =>
 			score(a) - score(b) ||
@@ -75,8 +67,9 @@ export const headOf = (name: string): string =>
 
 /**
  * The automatic match for a title: an exact name, else the shortest name that is the title plus
- * a subtitle. Ties go to the entry's year when it has one. Anything looser is a guess, so the
- * operator picks it with "Wrong game?" instead.
+ * a subtitle. Spaces and punctuation don't count ("Little Big Planet 3" is "LittleBigPlanet 3",
+ * not "Little Big Planet 3: Dark Souls 3 Costume pack"). Ties go to the entry's year when it has
+ * one. Anything looser is a guess, so the operator picks it with "Wrong game?" instead.
  */
 export const bestHit = (
 	hits: ReadonlyArray<BucketHit>,
@@ -84,12 +77,12 @@ export const bestHit = (
 	yearFor?: (id: string) => number | undefined,
 	year?: number | null,
 ): BucketHit | undefined => {
-	const want = normalize(title);
+	const want = squash(title);
 	if (!want) return undefined;
-	const exact = hits.filter((h) => normalize(h.name) === want);
+	const exact = hits.filter((h) => squash(h.name) === want);
 	const pool = exact.length
 		? exact
-		: hits.filter((h) => normalize(headOf(h.name)) === want);
+		: hits.filter((h) => squash(headOf(h.name)) === want);
 	if (!pool.length) return undefined;
 	if (year != null && yearFor) {
 		const same = pool.find((h) => yearFor(h.id) === year);
@@ -150,8 +143,8 @@ const lookup = (entry: LibraryEntry, pin: string | undefined) =>
 		const year = entry.release_year;
 		if (year != null) {
 			// Same-name remakes: fetch each exact hit and prefer the entry's year.
-			const want = normalize(entry.title);
-			const same = hits.filter((h) => normalize(h.name) === want).slice(0, 6);
+			const want = squash(entry.title);
+			const same = hits.filter((h) => squash(h.name) === want).slice(0, 6);
 			if (same.length > 1) {
 				const games = yield* Effect.forEach(same, (h) => client.game(h.id), {
 					concurrency: 3,
