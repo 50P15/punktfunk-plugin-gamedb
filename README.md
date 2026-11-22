@@ -17,10 +17,10 @@ from [LizardByte GameDB](https://github.com/LizardByte/GameDB), a static mirror 
 
 ## How it works:
 
-Just type the game name and after a couple of seconds, the image will autoload:
+Just type the game name and after a couple of seconds the image will autoload:
 ![Demo](docs/plugin1.webp)
 
-If you dont find the game, type the proper name and click on "Wrong game?"
+If you dont find the game click on "Wrong game?" and type the proper name.
 ![Demo](docs/plugin2.webp)
 
 ## Install
