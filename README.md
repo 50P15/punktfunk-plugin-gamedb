@@ -15,6 +15,14 @@ from [LizardByte GameDB](https://github.com/LizardByte/GameDB), a static mirror 
   `LittleBigPlanet`.
 - **Choose…** on the cover lists the covers of every edition sharing the game's name.
 
+## How it works:
+
+Just type the game name and after a couple of seconds, the image will autoload:
+![Demo](docs/plugin1.webp)
+
+If you dont find the game, type the proper name and click on "Wrong game?"
+![Demo](docs/plugin2.webp)
+
 ## Install
 
 Available in **Punktfunk's official catalog** as **GameDB** (Punktfunk 0.47.0 or later).
